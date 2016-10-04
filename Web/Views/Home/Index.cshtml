@@ -1,0 +1,70 @@
+﻿@{
+	ViewData["Title"] = "Fakturaunderlag";
+}
+
+<div class="hidden">
+	<div class="row" name="project-row-template" data-project-row="-1">
+		<div class="col-xs-2">
+			<input type="text" class="form-control" name="customers[]" placeholder="Kund">
+		</div>
+
+		<div class="col-xs-2">
+			<input type="text" class="form-control" name="projects[]" placeholder="Projekt">
+		</div>
+
+		<div class="col-xs-2">
+			<input type="text" class="form-control" name="activities[]" placeholder="Aktivitet">
+		</div>
+
+		<div class="col-xs-2">
+			<input type="text" class="form-control" name="times[]">
+		</div>
+
+		<div class="col-xs-2 input-group-btn" name="button-div">
+			<button type="button" name="add-project" label="Lägg till ett projekt" class="btn btn-success"><i class="fa fa-plus"></i></button>
+			<button type="button" name="delete-project" label="Ta bort projekt" class="btn btn-danger"><i class="fa fa-trash"></i></button>
+		</div>
+	</div>
+</div>
+
+<div class="row">
+	<h1>Skapa fakturaunderlag</h1>
+	<form id="invoice-data-form">
+		<fieldset class="form-group" name="project-rows">
+			<legend>Projekt</legend>
+			<div class="row">
+				<div class="col-xs-6 form-group">
+					<label for="checkbox-previous-month">Skapa för föregående månad?</label>
+					<input type="checkbox" name="previousMonth" value="true" id="checkbox-previous-month" />
+				</div>
+			</div>
+			<div class="row" name="project-row" data-project-row="0">
+				<div class="col-xs-2">
+					<input type="text" class="form-control" name="customers[]" placeholder="Kund">
+				</div>
+
+				<div class="col-xs-2">
+					<input type="text" class="form-control" name="projects[]" placeholder="Projekt">
+				</div>
+
+				<div class="col-xs-2">
+					<input type="text" class="form-control" name="activities[]" placeholder="Aktivitet">
+				</div>
+
+				<div class="col-xs-2">
+					<input type="text" class="form-control" name="times[]">
+				</div>
+
+				<div class="col-xs-2" name="button-div">
+					<button type="button" name="add-project" label="Lägg till ett projekt" class="btn btn-success"><i class="fa fa-plus"></i></button>
+				</div>
+			</div>
+		</fieldset>
+	</form>
+</div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<textarea class="form-control" style="min-width: 100%;" rows="25" readonly="readonly" name="invoice-data"></textarea>
+	</div>
+</div>
