@@ -70,7 +70,7 @@ namespace Web.Controllers
                 now = new DateTime(now.Year, now.Month - 1, 1);
             }
 
-            var di = DateInfo.Instance;
+            var di = new DateInfo();
             await di.ReadDays(now.Year, now.Month);
 
             var currentDayOfMonth = new DateTime(now.Year, now.Month, 1);

@@ -10,17 +10,9 @@ namespace Logic.Models
 {
     public class DateInfo
     {
-        private static DateInfo _instance;
         private List<Day> _days;
         public List<Day> Days => _days ?? (_days = new List<Day>());
-
-        /// <summary>
-        /// Returns the instance of this class.
-        /// </summary>
-        public static DateInfo Instance => _instance ?? (_instance = new DateInfo());
-
-        private DateInfo() { }
-
+        
         /// <summary>
         /// Fetches date info from api.dryg.net using the v2.1 API
         /// </summary>
