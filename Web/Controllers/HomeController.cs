@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Logic.Models;
-using Common;
 using Web.Database;
 
 namespace Web.Controllers
@@ -68,7 +67,7 @@ namespace Web.Controllers
             var now = DateTime.Now;
             if (previousMonth.HasValue && previousMonth.Value)
             {
-                now = now.AddMonths(-1);
+                now = new DateTime(now.Year, now.Month - 1, 1);
             }
 
             var di = DateInfo.Instance;
