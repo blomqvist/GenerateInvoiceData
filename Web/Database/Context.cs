@@ -12,7 +12,7 @@ namespace Web.Database
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlite("Filename=./" + Constants.DbName);
+            optionsBuilder.UseSqlite("Filename=../db/" + Constants.DbName);
         }
     }
 }

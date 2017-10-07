@@ -1,4 +1,4 @@
-﻿using Common;
+﻿//using Common;
 using System;
 
 namespace Logic.Models
@@ -21,7 +21,7 @@ namespace Logic.Models
 
         public override string ToString()
         {
-            return Date.ToShortDateString() + $"\t{Company.Name}\t{Project.Name}\t{Activity.Name}\t\t\t\t{NormalTime}\t{Overtimex15}\t{Overtimex2}";
+            return /*Date.ToShortDateString() +*/ $"\t{Company.Name}\t{Project.Name}\t{Activity.Name}\t\t\t\t{NormalTime}\t{Overtimex15}\t{Overtimex2}";
         }
     }
 }

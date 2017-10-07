@@ -1,8 +1,12 @@
-﻿namespace Logic.Models
+﻿using System.Collections.Generic;
+
+namespace Logic.Models
 {
-    public class Project
+    public class Project : Base
     {
-        public int Id { get; set; }
         public string Name { get; set; }
+
+        public virtual ICollection<Activity> Activities { get; set; }
+        public virtual Company Company { get; set; }
     }
 }

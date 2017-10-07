@@ -5,6 +5,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Logic.Models;
 using Web.Database;
+using Common;
+using Microsoft.EntityFrameworkCore;
+using Web.JsonModels;
+using Newtonsoft.Json;
 
 namespace Web.Controllers
 {
@@ -33,24 +37,27 @@ namespace Web.Controllers
                         continue;
                     }
 
-                    var activity = ctx.Activities.FirstOrDefault(a => a.Name.Equals(activities[i], StringComparison.CurrentCultureIgnoreCase)) ?? new Activity() { Name = activities[i] };
                     var company = ctx.Companies.FirstOrDefault(c => c.Name.Equals(customers[i], StringComparison.CurrentCultureIgnoreCase)) ?? new Company() { Name = customers[i] };
                     var project = ctx.Projects.FirstOrDefault(p => p.Name.Equals(projects[i], StringComparison.CurrentCultureIgnoreCase)) ?? new Project() { Name = projects[i] };
-
-                    if (activity.Id == 0)
-                    {
-                        ctx.Activities.Add(activity);
-                    }
+                    var activity = ctx.Activities.FirstOrDefault(a => a.Name.Equals(activities[i], StringComparison.CurrentCultureIgnoreCase)) ?? new Activity() { Name = activities[i] };
 
                     if (company.Id == 0)
                     {
                         ctx.Companies.Add(company);
                     }
 
+                    if (activity.Id == 0)
+                    {
+                        ctx.Activities.Add(activity);
+                    }
+
                     if (project.Id == 0)
                     {
                         ctx.Projects.Add(project);
                     }
+
+                    activity.Project = project;
+                    project.Company = company;
 
                     dateRows.Add(new DateRow()
                     {
@@ -90,6 +97,28 @@ namespace Web.Controllers
             }
 
             return Content(output);
+        }
+
+        [HttpGet, HttpPost]
+        public async Task<JsonResult> AutoComplete(string customers = "", string projects = "", string activities = "")
+        {
+            var jsonResult = new Autocomplete();
+            using (var ctx = new Context())
+            {
+                jsonResult.Customers = await ctx.Companies.Where(x => x.Name.StartsWith(customers))
+                    .Select(x => x.Name)
+                    .ToListAsync();
+
+                jsonResult.Projects = await ctx.Projects.Where(x => x.Name.StartsWith(projects) || x.Company.Name.StartsWith(customers))
+                    .Select(x => x.Name)
+                    .ToListAsync();
+
+                jsonResult.Activities = await ctx.Activities.Where(x => x.Name.StartsWith(activities) || x.Project.Name.StartsWith(projects))
+                    .Select(x => x.Name)
+                    .ToListAsync();
+            }
+
+            return new JsonResult(jsonResult);
         }
 
         public IActionResult Error()
