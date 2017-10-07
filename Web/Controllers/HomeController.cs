@@ -1,14 +1,12 @@
-﻿using System;
+﻿using Logic.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Logic.Models;
 using Web.Database;
-using Common;
-using Microsoft.EntityFrameworkCore;
 using Web.JsonModels;
-using Newtonsoft.Json;
 
 namespace Web.Controllers
 {
@@ -102,18 +100,27 @@ namespace Web.Controllers
         [HttpGet, HttpPost]
         public async Task<JsonResult> AutoComplete(string customers = "", string projects = "", string activities = "")
         {
+            customers = customers ?? string.Empty;
+            projects = projects ?? string.Empty;
+            activities = activities ?? string.Empty;
+
             var jsonResult = new Autocomplete();
             using (var ctx = new Context())
             {
-                jsonResult.Customers = await ctx.Companies.Where(x => x.Name.StartsWith(customers))
+                jsonResult.Customers = await ctx.Companies
+                    .Where(x => x.Name.StartsWith(customers, StringComparison.CurrentCultureIgnoreCase))
                     .Select(x => x.Name)
                     .ToListAsync();
 
-                jsonResult.Projects = await ctx.Projects.Where(x => x.Name.StartsWith(projects) || x.Company.Name.StartsWith(customers))
+                jsonResult.Projects = await ctx.Projects
+                    .Where(x => x.Name.StartsWith(projects, StringComparison.CurrentCultureIgnoreCase) 
+                    && (!string.IsNullOrWhiteSpace(customers) ? x.Company.Name.StartsWith(customers, StringComparison.CurrentCultureIgnoreCase) : true))
                     .Select(x => x.Name)
                     .ToListAsync();
 
-                jsonResult.Activities = await ctx.Activities.Where(x => x.Name.StartsWith(activities) || x.Project.Name.StartsWith(projects))
+                jsonResult.Activities = await ctx.Activities
+                    .Where(x => x.Name.StartsWith(activities, StringComparison.CurrentCultureIgnoreCase) 
+                    && (!string.IsNullOrWhiteSpace(projects) ? x.Project.Name.StartsWith(projects, StringComparison.CurrentCultureIgnoreCase) : true))
                     .Select(x => x.Name)
                     .ToListAsync();
             }
